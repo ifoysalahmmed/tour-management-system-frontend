@@ -11,8 +11,8 @@ const Footer = () => {
             </div>
 
             <p className="mt-4 max-w-xs text-muted-foreground/80">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse non
-              cupiditate quae nam molestias.
+              Tour & Travel Management is the best platform for planning your
+              next adventure.
             </p>
 
             <ul className="mt-8 flex gap-6">
@@ -21,7 +21,7 @@ const Footer = () => {
                   href="#"
                   rel="noreferrer"
                   target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
+                  className="text-muted-foreground transition hover:opacity-75"
                 >
                   <span className="sr-only">Facebook</span>
 
@@ -45,7 +45,7 @@ const Footer = () => {
                   href="#"
                   rel="noreferrer"
                   target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
+                  className="text-muted-foreground transition hover:opacity-75"
                 >
                   <span className="sr-only">Instagram</span>
 
@@ -69,7 +69,7 @@ const Footer = () => {
                   href="#"
                   rel="noreferrer"
                   target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
+                  className="text-muted-foreground transition hover:opacity-75"
                 >
                   <span className="sr-only">Twitter</span>
 
@@ -89,7 +89,7 @@ const Footer = () => {
                   href="#"
                   rel="noreferrer"
                   target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
+                  className="text-muted-foreground transition hover:opacity-75"
                 >
                   <span className="sr-only">GitHub</span>
 
@@ -113,7 +113,7 @@ const Footer = () => {
                   href="#"
                   rel="noreferrer"
                   target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
+                  className="text-muted-foreground transition hover:opacity-75"
                 >
                   <span className="sr-only">Dribbble</span>
 
@@ -136,171 +136,157 @@ const Footer = () => {
 
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4">
             <div>
-              <p className="font-medium text-gray-900">Services</p>
+              <p className="font-medium text-muted-foreground">Services</p>
 
               <ul className="mt-6 space-y-4 text-sm">
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    1on1 Coaching{" "}
+                    1on1 Coaching
                   </a>
                 </li>
 
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    Company Review{" "}
+                    Company Review
                   </a>
                 </li>
 
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    Accounts Review{" "}
+                    Accounts Review
                   </a>
                 </li>
 
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    HR Consulting{" "}
+                    HR Consulting
                   </a>
                 </li>
 
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    SEO Optimisation{" "}
+                    SEO Optimization
                   </a>
                 </li>
               </ul>
             </div>
 
             <div>
-              <p className="font-medium text-gray-900">Company</p>
+              <p className="font-medium text-muted-foreground">Company</p>
 
               <ul className="mt-6 space-y-4 text-sm">
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    About{" "}
+                    About
                   </a>
                 </li>
 
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    Meet the Team{" "}
+                    Meet the Team
                   </a>
                 </li>
 
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    Accounts Review{" "}
+                    Accounts Review
                   </a>
                 </li>
               </ul>
             </div>
 
             <div>
-              <p className="font-medium text-gray-900">Helpful Links</p>
+              <p className="font-medium text-muted-foreground">Helpful Links</p>
 
               <ul className="mt-6 space-y-4 text-sm">
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    Contact{" "}
+                    Contact
                   </a>
                 </li>
 
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    FAQs{" "}
+                    FAQs
                   </a>
                 </li>
 
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    Live Chat{" "}
+                    Live Chat
                   </a>
                 </li>
               </ul>
             </div>
 
             <div>
-              <p className="font-medium text-gray-900">Legal</p>
+              <p className="font-medium text-muted-foreground">Legal</p>
 
               <ul className="mt-6 space-y-4 text-sm">
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    Accessibility{" "}
+                    Accessibility
                   </a>
                 </li>
 
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    Returns Policy{" "}
+                    Returns Policy
                   </a>
                 </li>
 
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
-                    {" "}
-                    Refund Policy{" "}
+                    Refund Policy
                   </a>
                 </li>
 
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    className="text-muted-foreground transition hover:opacity-75"
                   >
                     Hiring-3 Statistics
                   </a>
@@ -310,8 +296,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <p className="text-xs text-gray-500">
-          &copy; 2022. Company Name. All rights reserved.
+        <p className="text-xs text-muted-foreground">
+          &copy; 2026. Tour & Travel Management System. All rights reserved.
         </p>
       </div>
     </footer>
