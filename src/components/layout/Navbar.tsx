@@ -12,6 +12,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+import { ModeToggle } from "./ModeToggler";
+
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { active: true, href: "#", label: "Home" },
@@ -104,6 +106,7 @@ const Navbar = () => {
         </div>
         {/* Right side */}
         <div className="flex items-center gap-2">
+          <ModeToggle />
           <Button
             className="text-sm"
             size="sm"
