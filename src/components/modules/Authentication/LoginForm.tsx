@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -17,8 +17,14 @@ import PasswordInput from "@/components/ui/password";
 import { cn } from "@/lib/utils";
 
 import { loginSchema, type LoginFormInputs } from "./login.schema";
+import { useLoginMutation } from "@/redux/features/auth/auth.api";
+import { toast } from "sonner";
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
+  const [login] = useLoginMutation();
+  const navigate = useNavigate();
+
   const { control, handleSubmit } = useForm<LoginFormInputs>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -27,8 +33,25 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
     },
   });
 
-  const onSubmit = (data: LoginFormInputs) => {
-    console.log(data);
+  const onSubmit = async (data: LoginFormInputs) => {
+    try {
+      const result = await login(data).unwrap();
+      console.log("Login successful:", result);
+      toast.success(result.message);
+    } catch (error: unknown) {
+      if ((error as FetchBaseQueryError).status) {
+        const err = error as FetchBaseQueryError & {
+          data?: { message?: string };
+          status?: number;
+        };
+        toast.error(err.data?.message || "Login failed. Please try again.");
+        if (err.status === 401) {
+          navigate("/verify", { state: data.email });
+        }
+      } else {
+        console.error("Login failed:", error);
+      }
+    }
   };
 
   return (

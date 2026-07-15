@@ -1,5 +1,6 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm, Controller } from "react-hook-form";
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import Google from "@/assets/icons/Google";
@@ -15,13 +16,18 @@ import {
 import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/ui/password";
 import { cn } from "@/lib/utils";
+import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 
 import { registerSchema, type RegisterFormInputs } from "./register.schema";
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 const RegisterForm = ({
   className,
   ...props
 }: React.ComponentProps<"form">) => {
+  const [register] = useRegisterMutation();
+  const navigate = useNavigate();
+
   const { control, handleSubmit } = useForm<RegisterFormInputs>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -32,8 +38,33 @@ const RegisterForm = ({
     },
   });
 
-  const onSubmit = (data: RegisterFormInputs) => {
-    console.log(data);
+  const onSubmit = async (data: RegisterFormInputs) => {
+    const userData = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    };
+
+    try {
+      const result = await register(userData).unwrap();
+      console.log("Registration successful:", result);
+      toast.success(result.message);
+      navigate("/verify");
+    } catch (error: unknown) {
+      if ((error as FetchBaseQueryError).status) {
+        const err = error as FetchBaseQueryError & {
+          data?: { statusCode?: number };
+        };
+
+        if (err.data?.statusCode === 409) {
+          toast.error("Email already exists. Please use a different email.");
+        } else {
+          console.error("Registration failed:", error);
+        }
+      } else {
+        toast.error("Something went wrong. Please try again later.");
+      }
+    }
   };
 
   return (
