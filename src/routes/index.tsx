@@ -6,9 +6,9 @@ import About from "@/pages/About";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Verify from "@/pages/Verify";
-import Analytics from "@/pages/Admin/Analytics";
-import AddTour from "@/pages/Admin/AddTour";
 import Bookings from "@/pages/User/Bookings";
+import { generateRoutes } from "@/utils/generateRoutes";
+import { adminSidebarItems } from "./adminSidebarItems";
 
 export const router = createBrowserRouter([
   {
@@ -24,16 +24,7 @@ export const router = createBrowserRouter([
   {
     path: "/admin",
     Component: DashboardLayout,
-    children: [
-      {
-        path: "analytics",
-        Component: Analytics,
-      },
-      {
-        path: "add-tour",
-        Component: AddTour,
-      },
-    ],
+    children: [...generateRoutes(adminSidebarItems)],
   },
   {
     path: "/user",
