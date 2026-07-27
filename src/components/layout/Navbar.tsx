@@ -85,7 +85,7 @@ const Navbar = () => {
               <Logo />
             </Link>
 
-            <NavigationMenu className="hidden md:flex">
+            <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
                 {navigationLinks.map((link) => (
                   <NavigationMenuItem key={link.href}>
@@ -97,26 +97,25 @@ const Navbar = () => {
               </NavigationMenuList>
             </NavigationMenu>
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <ModeToggle />
 
-          <div className="flex items-center gap-2">
-            <ModeToggle />
-
-            {!isLoading &&
-              (user ? (
-                <Button
-                  className="text-sm"
-                  variant="outline"
-                  onClick={handleLogout}
-                  disabled={isLoggingOut}
-                >
-                  {isLoggingOut ? "Logging out..." : "Logout"}
-                </Button>
-              ) : (
-                <Button className="text-sm">
-                  <Link to="/login">Login</Link>
-                </Button>
-              ))}
-          </div>
+          {!isLoading &&
+            (user ? (
+              <Button
+                className="text-sm"
+                variant="outline"
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+              >
+                {isLoggingOut ? "Logging out..." : "Logout"}
+              </Button>
+            ) : (
+              <Button className="text-sm">
+                <Link to="/login">Login</Link>
+              </Button>
+            ))}
         </div>
       </div>
     </header>
