@@ -5,6 +5,7 @@ export type {
   IRegisterResponse,
   ISendOTP,
   IVerifyOTP,
+  IUserInfoResponse,
 } from "./auth.type";
 
 export interface TMeta {

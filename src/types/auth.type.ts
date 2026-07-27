@@ -57,3 +57,21 @@ export interface IVerifyOTP {
   email: string;
   otp: string;
 }
+
+export interface IUserInfoResponse {
+  _id: string;
+  name: string;
+  email: string;
+  auths: [
+    {
+      providerId: string;
+      provider: string;
+    },
+  ];
+  role: string;
+  isVerified: boolean;
+  isActive: string;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
