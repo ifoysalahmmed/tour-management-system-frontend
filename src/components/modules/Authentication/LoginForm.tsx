@@ -1,8 +1,10 @@
 import { Link, useNavigate } from "react-router";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 import Google from "@/assets/icons/Google";
+import { envVars } from "@/config/env";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -15,15 +17,24 @@ import {
 import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/ui/password";
 import { cn } from "@/lib/utils";
+import { useLoginMutation } from "@/redux/features/auth/auth.api";
 
 import { loginSchema, type LoginFormInputs } from "./login.schema";
-import { useLoginMutation } from "@/redux/features/auth/auth.api";
+
 import { toast } from "sonner";
-import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+
+const GOOGLE_LOGIN_URL = `${envVars.VITE_BASE_URL}/auth/google`;
+
+type ApiError = FetchBaseQueryError & {
+  data?: {
+    message?: string;
+  };
+};
 
 const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
-  const [login] = useLoginMutation();
   const navigate = useNavigate();
+
+  const [login, { isLoading }] = useLoginMutation();
 
   const { control, handleSubmit } = useForm<LoginFormInputs>({
     resolver: zodResolver(loginSchema),
@@ -36,26 +47,31 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
   const onSubmit = async (data: LoginFormInputs) => {
     try {
       const result = await login(data).unwrap();
-      console.log("Login successful:", result);
+
       toast.success(result.message);
-    } catch (error: unknown) {
-      if ((error as FetchBaseQueryError).status) {
-        const err = error as FetchBaseQueryError & {
-          data?: { message?: string };
-          status?: number;
-        };
-        toast.error(err.data?.message || "Login failed. Please try again.");
-        if (err.status === 401) {
-          navigate("/verify", { state: data.email });
-        }
-      } else {
-        console.error("Login failed:", error);
+
+      navigate("/", {
+        replace: true,
+      });
+    } catch (error) {
+      const err = error as ApiError;
+
+      const errorMessage =
+        err.data?.message ?? "Login failed. Please try again later.";
+
+      toast.error(errorMessage);
+
+      if (errorMessage.toLowerCase().includes("not verified")) {
+        navigate("/verify", {
+          state: data.email,
+        });
       }
     }
   };
 
   return (
     <form
+      noValidate
       className={cn("flex flex-col gap-6", className)}
       onSubmit={handleSubmit(onSubmit)}
       {...props}
@@ -63,6 +79,7 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Login to your account</h1>
+
           <p className="text-sm text-balance text-muted-foreground">
             Enter your email below to login to your account
           </p>
@@ -74,14 +91,16 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
           render={({ field, fieldState }) => (
             <Field>
               <FieldLabel htmlFor="email">Email</FieldLabel>
+
               <Input
                 {...field}
                 id="email"
                 type="email"
-                aria-invalid={fieldState.invalid}
                 placeholder="m@example.com"
                 autoComplete="email"
+                aria-invalid={fieldState.invalid}
               />
+
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -94,34 +113,48 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
             <Field>
               <div className="flex items-center">
                 <FieldLabel htmlFor="password">Password</FieldLabel>
+
                 <Link
-                  to={"/forgot-password"}
+                  to="/forgot-password"
                   className="ml-auto text-sm text-orange-600 underline-offset-4 hover:underline"
                 >
                   Forgot your password?
                 </Link>
               </div>
+
               <PasswordInput
                 {...field}
+                id="password"
+                autoComplete="current-password"
                 aria-invalid={fieldState.invalid}
-                autoComplete="password"
               />
+
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
+
         <Field>
-          <Button type="submit">Login</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Logging in..." : "Login"}
+          </Button>
         </Field>
+
         <FieldSeparator>Or continue with</FieldSeparator>
+
         <Field>
-          <Button variant="outline" type="button">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => window.open(GOOGLE_LOGIN_URL, "_self")}
+          >
             <Google />
             Login with Google
           </Button>
+
           <FieldDescription className="text-center">
-            Don&apos;t have an account?{" "}
-            <Link to={"/register"}>
+            Don't have an account?{" "}
+            <Link to="/register">
               <span className="underline underline-offset-4">Register</span>
             </Link>
           </FieldDescription>

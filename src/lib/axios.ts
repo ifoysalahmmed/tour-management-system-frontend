@@ -5,6 +5,7 @@ import { envVars } from "@/config/env";
 export const axiosInstance = axios.create({
   baseURL: envVars.VITE_BASE_URL,
   timeout: 5000,
+  withCredentials: true,
 });
 
 // Add a request interceptor

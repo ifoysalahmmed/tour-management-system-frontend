@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 
+import Hamburger from "@/assets/icons/Hamburger";
 import Logo from "@/assets/icons/Logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,67 +14,63 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useAppDispatch } from "@/redux/hook";
+import {
+  authApi,
+  useLogoutMutation,
+  useUserInfoQuery,
+} from "@/redux/features/auth/auth.api";
 
 import { ModeToggle } from "./ModeToggler";
 
-// Navigation links array to be used in both desktop and mobile menus
+import { toast } from "sonner";
+
 const navigationLinks = [
-  // { active: true, href: "/", label: "Home" },
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
 ];
 
 const Navbar = () => {
+  const dispatch = useAppDispatch();
+
+  const { data, isLoading } = useUserInfoQuery();
+  const user = data?.data;
+
+  const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      const result = await logout(undefined).unwrap();
+
+      dispatch(authApi.util.resetApiState());
+
+      toast.success(result?.message || "Logged out successfully");
+    } catch {
+      toast.error("Failed to log out");
+    }
+  };
+
   return (
     <header className="border-b md:px-8">
-      <div className="container px-8 mx-auto flex h-16 items-center justify-between gap-4">
-        {/* Left side */}
+      <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
         <div className="flex items-center gap-2">
-          {/* Mobile menu trigger */}
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                className="group size-8 md:hidden"
                 size="icon"
                 variant="ghost"
+                className="group size-8 md:hidden"
               >
-                <svg
-                  className="pointer-events-none"
-                  fill="none"
-                  height={16}
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  width={16}
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    className="-translate-y-1.75 origin-center transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-315"
-                    d="M4 12L20 12"
-                  />
-                  <path
-                    className="origin-center transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.8)] group-aria-expanded:rotate-45"
-                    d="M4 12H20"
-                  />
-                  <path
-                    className="origin-center translate-y-1.75 transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-135"
-                    d="M4 12H20"
-                  />
-                </svg>
+                <Hamburger />
               </Button>
             </PopoverTrigger>
-            <PopoverContent align="start" className="w-36 p-1 md:hidden">
+
+            <PopoverContent align="start" className="w-40 p-1 md:hidden">
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-                  {navigationLinks.map((link, _index) => (
-                    <NavigationMenuItem className="w-full" key={link.label}>
-                      <NavigationMenuLink
-                        // active={link.active}
-                        className="py-1.5"
-                        // href={link.href}
-                      >
+                  {navigationLinks.map((link) => (
+                    <NavigationMenuItem key={link.href} className="w-full">
+                      <NavigationMenuLink asChild className="w-full py-2">
                         <Link to={link.href}>{link.label}</Link>
                       </NavigationMenuLink>
                     </NavigationMenuItem>
@@ -82,22 +79,17 @@ const Navbar = () => {
               </NavigationMenu>
             </PopoverContent>
           </Popover>
-          {/* Main nav */}
+
           <div className="flex items-center gap-6">
-            <Link className="text-primary hover:text-primary/90" to={"/"}>
+            <Link to="/" className="text-primary hover:text-primary/90">
               <Logo />
             </Link>
-            {/* Navigation menu */}
-            <NavigationMenu className="max-md:hidden">
+
+            <NavigationMenu className="hidden md:flex">
               <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link, _index) => (
-                  <NavigationMenuItem key={link.label}>
-                    <NavigationMenuLink
-                      asChild
-                      // active={link.active}
-                      className="py-1.5 font-medium text-muted-foreground hover:text-primary"
-                      // href={link.href}
-                    >
+                {navigationLinks.map((link) => (
+                  <NavigationMenuItem key={link.href}>
+                    <NavigationMenuLink asChild className="py-1.5 font-medium">
                       <Link to={link.href}>{link.label}</Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
@@ -105,14 +97,26 @@ const Navbar = () => {
               </NavigationMenuList>
             </NavigationMenu>
           </div>
-        </div>
-        {/* Right side */}
-        <div className="flex items-center gap-2">
-          <ModeToggle />
 
-          <Button className="text-sm">
-            <Link to={"/login"}>Login</Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <ModeToggle />
+
+            {!isLoading &&
+              (user ? (
+                <Button
+                  className="text-sm"
+                  variant="outline"
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                >
+                  {isLoggingOut ? "Logging out..." : "Logout"}
+                </Button>
+              ) : (
+                <Button className="text-sm">
+                  <Link to="/login">Login</Link>
+                </Button>
+              ))}
+          </div>
         </div>
       </div>
     </header>
