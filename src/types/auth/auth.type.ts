@@ -1,3 +1,5 @@
+export type TRole = "SUPER_ADMIN" | "ADMIN" | "USER" | "GUIDE";
+
 export interface ILogin {
   email: string;
   password: string;
@@ -16,7 +18,7 @@ export interface ILoginResponse {
         provider: string;
       },
     ];
-    role: string;
+    role: TRole;
     isVerified: boolean;
     isActive: string;
     isDeleted: boolean;
@@ -41,7 +43,7 @@ export interface IRegisterResponse {
       provider: string;
     },
   ];
-  role: string;
+  role: TRole;
   isVerified: boolean;
   isActive: string;
   isDeleted: boolean;
@@ -68,7 +70,7 @@ export interface IUserInfoResponse {
       provider: string;
     },
   ];
-  role: string;
+  role: TRole;
   isVerified: boolean;
   isActive: string;
   isDeleted: boolean;

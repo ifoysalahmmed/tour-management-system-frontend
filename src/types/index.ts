@@ -8,7 +8,8 @@ export type {
   ISendOTP,
   IVerifyOTP,
   IUserInfoResponse,
-} from "./auth.type";
+  TRole,
+} from "./auth/auth.type";
 
 export interface TMeta {
   total: number;

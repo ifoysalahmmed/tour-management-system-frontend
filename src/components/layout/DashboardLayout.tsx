@@ -1,11 +1,13 @@
-import { AppSidebar } from "@/components/app-sidebar";
+import { Outlet } from "react-router";
+
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Outlet } from "react-router";
+
+import AppSidebar from "../AppSidebar";
 
 const DashboardLayout = () => {
   return (

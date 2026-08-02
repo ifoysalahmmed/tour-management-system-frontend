@@ -1,14 +1,21 @@
-import { createBrowserRouter } from "react-router";
+import { lazy } from "react";
+import { createBrowserRouter, Navigate } from "react-router";
 
 import App from "@/App";
-import DashboardLayout from "@/components/layout/DashboardLayout";
-import About from "@/pages/About";
-import Login from "@/pages/Login";
-import Register from "@/pages/Register";
-import Verify from "@/pages/Verify";
-import Bookings from "@/pages/User/Bookings";
+import { role } from "@/constants/role";
+import type { TRole } from "@/types";
 import { generateRoutes } from "@/utils/generateRoutes";
+import { withAuth } from "@/utils/withAuth";
+
 import { adminSidebarItems } from "./adminSidebarItems";
+import { userSidebarItems } from "./userSidebarItems";
+
+const About = lazy(() => import("@/pages/About"));
+const Dashboard = lazy(() => import("@/components/layout/DashboardLayout"));
+const Login = lazy(() => import("@/pages/Login"));
+const Register = lazy(() => import("@/pages/Register"));
+const Unauthorized = lazy(() => import("@/pages/Unauthorized"));
+const Verify = lazy(() => import("@/pages/Verify"));
 
 export const router = createBrowserRouter([
   {
@@ -17,23 +24,33 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "about",
-        Component: About,
+        Component: withAuth(About),
       },
     ],
   },
   {
     path: "/admin",
-    Component: DashboardLayout,
-    children: [...generateRoutes(adminSidebarItems)],
+    Component: withAuth(Dashboard, [
+      role.admin as TRole,
+      role.superAdmin as TRole,
+    ]),
+    children: [
+      {
+        index: true,
+        element: <Navigate to="/admin/analytics" />,
+      },
+      ...generateRoutes(adminSidebarItems),
+    ],
   },
   {
     path: "/user",
-    Component: DashboardLayout,
+    Component: withAuth(Dashboard, [role.user as TRole]),
     children: [
       {
-        path: "bookings",
-        Component: Bookings,
+        index: true,
+        element: <Navigate to="/user/bookings" />,
       },
+      ...generateRoutes(userSidebarItems),
     ],
   },
   {
@@ -47,5 +64,9 @@ export const router = createBrowserRouter([
   {
     path: "/verify",
     Component: Verify,
+  },
+  {
+    path: "/unauthorized",
+    Component: Unauthorized,
   },
 ]);

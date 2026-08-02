@@ -1,4 +1,6 @@
+import { Fragment } from "react";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
 import Hamburger from "@/assets/icons/Hamburger";
 import Logo from "@/assets/icons/Logo";
@@ -14,20 +16,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useAppDispatch } from "@/redux/hook";
+import { role } from "@/constants/role";
 import {
   authApi,
   useLogoutMutation,
   useUserInfoQuery,
 } from "@/redux/features/auth/auth.api";
+import { useAppDispatch } from "@/redux/hook";
 
 import { ModeToggle } from "./ModeToggler";
 
-import { toast } from "sonner";
-
 const navigationLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
+  { href: "/", label: "Home", role: ["PUBLIC"] },
+  { href: "/about", label: "About", role: ["PUBLIC"] },
+  { href: "/admin", label: "Dashboard", role: [role.admin, role.superAdmin] },
+  { href: "/user", label: "Dashboard", role: [role.user] },
 ];
 
 const Navbar = () => {
@@ -88,16 +91,34 @@ const Navbar = () => {
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
                 {navigationLinks.map((link) => (
-                  <NavigationMenuItem key={link.href}>
-                    <NavigationMenuLink asChild className="py-1.5 font-medium">
-                      <Link to={link.href}>{link.label}</Link>
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
+                  <Fragment key={link.href}>
+                    {link.role.includes("PUBLIC") && (
+                      <NavigationMenuItem>
+                        <NavigationMenuLink
+                          asChild
+                          className="py-1.5 font-medium"
+                        >
+                          <Link to={link.href}>{link.label}</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    )}
+                    {!!user?.role && link.role.includes(user.role) && (
+                      <NavigationMenuItem>
+                        <NavigationMenuLink
+                          asChild
+                          className="py-1.5 font-medium"
+                        >
+                          <Link to={link.href}>{link.label}</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    )}
+                  </Fragment>
                 ))}
               </NavigationMenuList>
             </NavigationMenu>
           </div>
         </div>
+
         <div className="flex items-center gap-2">
           <ModeToggle />
 
@@ -112,9 +133,10 @@ const Navbar = () => {
                 {isLoggingOut ? "Logging out..." : "Logout"}
               </Button>
             ) : (
-              <Button className="text-sm">
-                <Link to="/login">Login</Link>
-              </Button>
+              <Button
+                className="text-sm"
+                render={() => <Link to="/login">Login</Link>}
+              />
             ))}
         </div>
       </div>

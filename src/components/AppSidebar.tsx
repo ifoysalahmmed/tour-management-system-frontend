@@ -1,5 +1,7 @@
 import * as React from "react";
+import { Link } from "react-router";
 
+import Logo from "@/assets/icons/Logo";
 import {
   Sidebar,
   SidebarContent,
@@ -12,29 +14,37 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import Logo from "@/assets/icons/Logo";
-import { Link } from "react-router";
-import { adminSidebarItems } from "@/routes/adminSidebarItems";
+import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import type { TRole } from "@/types";
+import { getSidebarItems } from "@/utils/getSidebarItems";
 
-const data = {
-  navMain: adminSidebarItems,
-};
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
+  const { data: userInfo } = useUserInfoQuery();
+  const user = userInfo?.data;
+
+  const sidebarData = {
+    navMain: user?.role ? getSidebarItems(user.role as TRole) : [],
+  };
+
+  console.log(user?.role);
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <Logo />
+        <Link to={"/"}>
+          <Logo />
+        </Link>
       </SidebarHeader>
       <SidebarContent>
-        {data.navMain.map((item) => (
+        {sidebarData.navMain.map((item) => (
           <SidebarGroup key={item.title}>
             <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {item.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
+                {item.items.map((subItem) => (
+                  <SidebarMenuItem key={subItem.title}>
                     <SidebarMenuButton>
-                      <Link to={item.url}>{item.title}</Link>
+                      <Link to={subItem.url}>{subItem.title}</Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -46,4 +56,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarRail />
     </Sidebar>
   );
-}
+};
+
+export default AppSidebar;
