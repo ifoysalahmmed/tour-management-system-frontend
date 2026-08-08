@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { toast } from "sonner";
 
 import Google from "@/assets/icons/Google";
@@ -22,17 +21,11 @@ import {
   useRegisterMutation,
   useSendOTPMutation,
 } from "@/redux/features/auth/auth.api";
+import type { ApiError } from "@/types";
 
 import { registerSchema, type RegisterFormInputs } from "./register.schema";
 
 const GOOGLE_REGISTER_URL = `${envVars.VITE_BASE_URL}/auth/google`;
-
-type ApiError = FetchBaseQueryError & {
-  data?: {
-    statusCode?: number;
-    message?: string;
-  };
-};
 
 const RegisterForm = ({
   className,

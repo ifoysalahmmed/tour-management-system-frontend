@@ -10,6 +10,11 @@ export type {
   IUserInfoResponse,
   TRole,
 } from "./auth/auth.type";
+export type {
+  ITourTypeRequest,
+  ITourTypeResponse,
+} from "./tourType/tourType.type";
+export type { ApiError } from "./error.type";
 
 export interface TMeta {
   total: number;

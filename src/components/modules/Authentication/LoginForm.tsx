@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 import Google from "@/assets/icons/Google";
 import { envVars } from "@/config/env";
@@ -18,18 +17,13 @@ import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/ui/password";
 import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
+import type { ApiError } from "@/types";
 
 import { loginSchema, type LoginFormInputs } from "./login.schema";
 
 import { toast } from "sonner";
 
 const GOOGLE_LOGIN_URL = `${envVars.VITE_BASE_URL}/auth/google`;
-
-type ApiError = FetchBaseQueryError & {
-  data?: {
-    message?: string;
-  };
-};
 
 const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
   const navigate = useNavigate();

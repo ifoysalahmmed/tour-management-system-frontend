@@ -26,8 +26,6 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
     navMain: user?.role ? getSidebarItems(user.role as TRole) : [],
   };
 
-  console.log(user?.role);
-
   return (
     <Sidebar {...props}>
       <SidebarHeader>
